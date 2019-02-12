@@ -56,9 +56,8 @@ where `<app>` will either be server configuration `lcdd` or the client configura
  
 ### Kdb set
  
-Using the native command line is one option to find out which settings are available.
-If you want to see all available options for the `server` configuration options for example
-you can simply call
+Using the native command line is one possibility to find out which configuration settings are available.
+If you want to see all available configuration settings for the `server`, you can simply call
 ```sh
 kdb ls '/sw/lcdproc/lcdd/#0/current/server'
 #> /sw/lcdproc/lcdd/#0/current/server/autorotate
@@ -67,7 +66,7 @@ kdb ls '/sw/lcdproc/lcdd/#0/current/server'
 #> /sw/lcdproc/lcdd/#0/current/server/driver
 ...
 ```
-To see all available options at all you can execute `kdb ls '/sw/lcdproc/lcdd/#0/current'`.
+To see all available configuration settings at all you can execute `kdb ls '/sw/lcdproc/lcdd/#0/current'`.
 To see the current value you can simply call `kdb get` on the respective key.
 Now lets take the curses driver for example again and lets see what is the 
 current background color is:
@@ -109,7 +108,8 @@ kdb set '/sw/lcdproc/lcdd/#0/current/curses/background' purple
 ```
 
 ### Kdb editor
-Another sophisticated possibility to see available options and edit them
+
+Another sophisticated possibility to see available configuration settings and edit them
 is to use the `kdb editor`. If you call `kdb editor <key>`, a local editor will
 be opened and all keys under the given `<key>` including all metadata will be shown.
 Depending on your default storage plugin you have chosen in Elektra the output may differ.
@@ -148,9 +148,9 @@ A new key is created and associated with all metadata from the `spec` namespace:
 kdb editor '/sw/lcdproc/lcdd/#0/current/curses/background'
 ##Editor
 ...
-spec/sw/lcdproc/lcdd/#0/current/curses/background^@^@
+#> spec/sw/lcdproc/lcdd/#0/current/curses/background^@^@
 ...
-user/sw/lcdproc/lcdd/#0/current/curses/background^@green^@
+#> user/sw/lcdproc/lcdd/#0/current/curses/background^@green^@
 ...
 ```
 This truncated output shows both keys under different namespaces.
