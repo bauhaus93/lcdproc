@@ -27,36 +27,36 @@ kdb get '/sw/lcdproc/lcdd/#0/current/curses/background'
 > green
 ```
 
-Elektra uses the concept of [Namespaces](https://www.libelektra.org/tutorials/namespaces)
-which means that keys are organized similar to directories in a file system. In the case
+Elektra's database is hierarchically structured which means that keys are organized 
+similar to directories in a file system. In the case
 of lcdproc, the relevant keys are located under `/sw/lcdproc/<app>/#0/current`
 where `<app>` will either be server configuration `lcdd` or the client configurations
- `lcdproc`, `lcdvc` and `lcdexec`. So in the upper example we change the background
- color of the curses driver to green for the server.
+ `lcdproc`, `lcdvc` and `lcdexec`. LCDproc drivers are installed on the server, 
+ so in the upper example we used `lcdd` to change the background 
+ color of the curses driver to green.
  
- Elektra also comes with specifications for lcdproc such as [LCDd-spec.ini](server/specification/LCDd-spec.ini).
+ The new lcdproc comes with a configuration specification such as [LCDd-spec.ini](server/specification/LCDd-spec.ini)
+ which is used by Elektra to validate configuration settings.
  This guarantees that certain mistakes cannot occur like setting the background color to *greeen* which could
  potentially crash the application. If you have followed the specification installation process correctly
  from the [INSTALL.md](INSTALL.md), you now have the full specification [mounted](https://www.libelektra.org/tutorials/mount-configuration-files)
- under the `spec` namespace. The specification for `/curses/background` background for example
+ under the `spec` namespace. 
+ 
+ The specification for `.../curses/background` background for example
  tells us that only `red, black, green, yellow, blue, magenta, cyan, white` are valid and that the value given 
  has to be of type string. Elektra will prevent you to set invalid values which will help reduce errors and misconfiguration.
   All these data and much more (eg. default values, descriptions, etc.) are saved as 
- [metadata](https://github.com/ElektraInitiative/libelektra/blob/e82b55f0d3ea4c77f3a4c04fa217084021bd8e4b/doc/dev/metadata.md)
+ [metadata](https://www.libelektra.org/devdocu/metadata)
  for each and every key under the `spec` namespace.
  
  The following sections will teach you on how to inspect all relevant settings
   and specifications and change desired configuration settings accordingly.
- There are multiple possibilities to do this but our focus will lie on
+ There best way to change settings is done via `kdb set`
+ since it integrates the best with specifications for configurations.
  
- * `kdb set/get` and
- * `kdb editor`
+### Changing Configurations
  
- since they integrate the best with specifications for configurations.
- 
-### Kdb set
- 
-Using the native command line is one possibility to find out which configuration settings are available.
+Using the native command line is the best possibility to find out which configuration settings are available.
 If you want to see all available configuration settings for the `server`, you can simply call
 ```sh
 kdb ls '/sw/lcdproc/lcdd/#0/current/server'
@@ -78,19 +78,47 @@ The result comes from the set `default` metadata which is saved for the key.
 You can see all metadata by calling `kdb lsmeta`:
 ```sh
 kdb lsmeta '/sw/lcdproc/lcdd/#0/current/curses/background'
-#> check/enum
+#> check/enum/#0
+#> check/enum/#1
+#> check/enum/#2
+#> check/enum/#3
+#> check/enum/#4
+#> check/enum/#5
+#> check/enum/#6
+#> check/enum/#7
 #> check/type
 #> default
 #> description
 #> type
 ```
-Here we can als see `check/enum` which is used by Elektra to assert
+Here we can als see `check/enum/#0-7` which is used by Elektra to assert
 for correct configuration settings. You can query for the values by calling
 `kdb getmeta`
 ```sh
-kdb getmeta '/sw/lcdproc/lcdd/#0/current/curses/background' 'check/enum'
-#> red, black, green, yellow, blue, magenta, cyan, white
+kdb getmeta '/sw/lcdproc/lcdd/#0/current/curses/background' 'check/enum/#0'
+#> red
 ```
+This `.../#<number>` notation is the typical array notation which is used by Elektra.
+If you want to query all metadata and see their values you can use this little script:
+```sh
+kdb lsmeta '/sw/lcdproc/lcdd/#0/current/curses/background' \
+| xargs -I% -n1 sh -c 'printf "% = " && kdb getmeta \
+"/sw/lcdproc/lcdd/#0/current/curses/background" "%"'
+#> check/enum/#0 = red
+#> check/enum/#1 = black
+#> check/enum/#2 = green
+#> check/enum/#3 = yellow
+#> check/enum/#4 = blue
+#> check/enum/#5 = magenta
+#> check/enum/#6 = cyan
+#> check/enum/#7 = white
+#> check/type = enum
+#> default = cyan
+#> description = background color when "backlight" is off
+#> type = enum
+```
+In future versions we might include a command which gives you all metadata 
+including their values with a simple command.
 If you try to set the value of the background to an invalid value, Elektra
 will raise an error and prevent a possible misconfiguration:
 ```sh
@@ -106,60 +134,3 @@ kdb set '/sw/lcdproc/lcdd/#0/current/curses/background' purple
 #> Mountpoint: user/sw/lcdproc/lcdd/#0/current
 #> Configfile: <path>/.config/LCDd.conf.17145:1549993505.561040.tmp
 ```
-
-### Kdb editor
-
-Another sophisticated possibility to see available configuration settings and edit them
-is to use the `kdb editor`. If you call `kdb editor <key>`, a local editor will
-be opened and all keys under the given `<key>` including all metadata will be shown.
-Depending on your default storage plugin you have chosen in Elektra the output may differ.
-The default storage plugin is the `dump` plugin and the output looks like this:
-```sh
-kdb editor '/sw/lcdproc/lcdd/#0/current/curses/background'
-##Editor
-#> kdbOpen 1
-#> ksNew 1
-#> keyNew 50 1
-#> spec/sw/lcdproc/lcdd/#0/current/curses/background^@^@
-#> keyMeta 11 54
-#> check/enum^@red, black, green, yellow, blue, magenta, cyan, white^@
-#> keyMeta 11 5
-#> check/type^@enum^@
-#> keyMeta 8 5
-#> default^@cyan^@
-#> keyMeta 12 41
-#> description^@background color when "backlight" is off^@
-#> keyMeta 5 5
-#> type^@enum^@
-#> keyEnd
-#> ksEnd
-```
-This is the actual format how the `dump` plugin saves data in a file. You
-can see all metadata and its associated meta values. But if you look closely, 
-these values are all under the `spec` namespace and changing anything here will not make a difference.
-Now lets see what happens when we set the background differently:
-```sh
-kdb set '/sw/lcdproc/lcdd/#0/current/curses/background' green
-#> Using name user/sw/lcdproc/lcdd/#0/current/curses/background
-#> Create a new key user/sw/lcdproc/lcdd/#0/current/curses/background with string "green"
-```
-A new key is created and associated with all metadata from the `spec` namespace:
-```sh
-kdb editor '/sw/lcdproc/lcdd/#0/current/curses/background'
-##Editor
-...
-#> spec/sw/lcdproc/lcdd/#0/current/curses/background^@^@
-...
-#> user/sw/lcdproc/lcdd/#0/current/curses/background^@green^@
-...
-```
-This truncated output shows both keys under different namespaces.
-Now if you want to change the value of the background, you can simply 
-replace the text *green* in the `user` namespace and once you save the file,
-all changes will apply. If any changed value is invalid, the output after closing
-the editor will tell you.
-
-The main advantage of the editor is to see all available metadata with one command.
-Also over multiple keys by simply calling `kdb editor` on a parent key, 
-eg. `kdb editor '/sw/lcdproc/lcdd/#0/current/curses`. When it comes to setting values
-other than the default value, `kdb set` is needed though.
