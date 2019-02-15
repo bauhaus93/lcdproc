@@ -3,12 +3,12 @@
 In the new version of lcdproc, [Elektra](https://www.libelektra.org/home) 
 will be used to store and edit configuration settings which are used by lcdproc.
 
-Elektra stores configuration in a global, hierarchical key database. Elektra
-comes with a lot of benefits such as [code generation](https://www.libelektra.org/tools/gen) or
-[advanced GUIs](https://www.libelektra.org/tools/qt-gui). But one major benefit
- is the possibility to have a 
- [validation on configuration settings](https://www.libelektra.org/tutorials/validate-configuration)
- because of configuration specifications.
+Elektra stores configuration in a global, hierarchical key database. 
+Elektra furthermore provides the possibility to have a 
+[validation on configuration settings](https://www.libelektra.org/tutorials/validate-configuration)
+because of configuration specifications. A configuration specification 
+simply tells which values should be legal for a certain configuration setting,
+eg. the server `port` value should be an integer within 0 and 65535.
 
 This tutorial will teach you how to introspect such a specification and how
 to change values accordingly. Be sure to have everything
@@ -17,7 +17,13 @@ installed correctly by first reading through [INSTALL.md](INSTALL.md).
 ## Basic Concept
 
 Elektra stores values in form of a key value pair in a global, 
-hierarchical key database. You can easily store values with 
+hierarchical key database. They are saved below a *path* where a path
+is similar to linux directories. If you have followed the specification installation process correctly
+from the [INSTALL.md](INSTALL.md), you now have the full specification 
+ga,[mounted](https://www.libelektra.org/tutorials/mount-configuration-files)
+under the `spec` namespace](https://www.libelektra.org/tutorials/namespaces).
+
+You can easily store values with 
 `kdb set <key> <value>` and fetch them via `kdb get <key>`.
 
 Let's take the following example:
@@ -38,16 +44,14 @@ where `<app>` will either be server configuration `lcdd` or the client configura
  The new lcdproc comes with a configuration specification such as [LCDd-spec.ini](server/specification/LCDd-spec.ini)
  which is used by Elektra to validate configuration settings.
  This guarantees that certain mistakes cannot occur like setting the background color to *greeen* which could
- potentially crash the application. If you have followed the specification installation process correctly
- from the [INSTALL.md](INSTALL.md), you now have the full specification [mounted](https://www.libelektra.org/tutorials/mount-configuration-files)
- under the `spec` namespace. 
+ potentially crash the application. 
  
  The specification for `.../curses/background` background for example
  tells us that only `red, black, green, yellow, blue, magenta, cyan, white` are valid and that the value given 
  has to be of type string. Elektra will prevent you to set invalid values which will help reduce errors and misconfiguration.
   All these data and much more (eg. default values, descriptions, etc.) are saved as 
  [metadata](https://www.libelektra.org/devdocu/metadata)
- for each and every key under the `spec` namespace.
+ for each and every key under the `spec` [namespace](https://www.libelektra.org/tutorials/namespaces).
  
  The following sections will teach you on how to inspect all relevant settings
   and specifications and change desired configuration settings accordingly.
