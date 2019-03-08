@@ -93,7 +93,16 @@ current background color is:
 kdb get '/sw/lcdproc/lcdd/#0/current/curses/background'
 #> cyan
 ```
-The result comes from the set `default` metadata which is saved for the key. 
+If you want to avoid typing the long path `/sw/lcdproc/lcdd/#0/current` all the time you
+can set a bookmark (see `man kdb`).
+```sh
+kdb set 'user/sw/elektra/kdb/#0/current/bookmarks/lcd' '/sw/lcdproc/lcdd/#0/current'
+kdb get +lcd/curses/background
+#> cyan
+```
+
+The result comes from the set `default` metadata which is saved for the key. If no value is set
+by the user, the `default` value is taken.
 You can see all metadata by calling `kdb lsmeta`:
 ```sh
 kdb lsmeta '/sw/lcdproc/lcdd/#0/current/curses/background'
@@ -123,6 +132,7 @@ If you want to query all metadata and see their values you can use this little s
 kdb lsmeta '/sw/lcdproc/lcdd/#0/current/curses/background' \
 | xargs -I% -n1 sh -c 'printf "% = " && kdb getmeta \
 "/sw/lcdproc/lcdd/#0/current/curses/background" "%"'
+#> check/enum = #7
 #> check/enum/#0 = red
 #> check/enum/#1 = black
 #> check/enum/#2 = green
@@ -131,10 +141,9 @@ kdb lsmeta '/sw/lcdproc/lcdd/#0/current/curses/background' \
 #> check/enum/#5 = magenta
 #> check/enum/#6 = cyan
 #> check/enum/#7 = white
-#> check/type = enum
 #> default = cyan
 #> description = background color when "backlight" is off
-#> type = enum
+#> type = string
 ```
 In future versions we might include a command which gives you all metadata 
 including their values with a simple command.
@@ -156,23 +165,57 @@ kdb set '/sw/lcdproc/lcdd/#0/current/curses/background' purple
 
 ### Kdb Editor
 
-...
+Another sophisticated possibility to see available options and edit them
+is to use the `kdb editor`. If you call `kdb editor <key>`, a local editor will
+be opened and all keys under the given `<key>` including all metadata will be shown.
 
-### Web Gui
+```sh
+kdb editor 'spec/sw/lcdproc/lcdd/#0/current/curses/backlight' ni
+##Editor
+#> []
+#>  check/enum/#1 = black
+#>  description = background color when "backlight" is off
+#>  check/enum/#6 = cyan
+#>  check/enum/#5 = magenta
+#>  check/enum/#4 = blue
+#>  check/enum = #7
+#>  default = cyan
+#>  check/enum/#7 = white
+#>  check/enum/#2 = green
+#>  check/enum/#0 = red
+#>  check/enum/#3 = yellow
+#>  type = string
+```
+ 
+As of now the editor is not able to handle multiple namespaces at once so be sure to always use 
+the key of the relevant namespace.
 
-...
+If you want to change a value, the best way is to manually set it with `kdb set`. Afterwards
+the editor can be used to investigate all associated metadata and change the value afterwards.
 
-#### Web Gui drawbacks
-
-Despite being one of the most appealing interfaces to change values,
-the `web` GUI comes with the major drawback of circumventing specifications.
-It will let you change any value without a warning or error message. So be 
-absolutely sure when you change any values that they are valid because
-you might easily cause misconfiguration.
-
-Another drawback is the lack of introspecting all metadata. Only a few are supported
-such as the description. The web gui is useful to create values for keys (or change them)
-if you already know what values are valid (eg. server `port` should be between 0 and 65535).
+```sh
+kdb set '/sw/lcdproc/lcdd/#0/current/curses/background' red
+kdb editor 'user/sw/lcdproc/lcdd/#0/current/curses/backlight' ni
+##Editor
+#> = red
+#>
+#>[]
+#> check/enum/#1 = black
+#> description = background color when "backlight" is on
+#> check/enum/#6 = cyan
+#> check/enum/#5 = magenta
+#> check/enum/#4 = blue
+#> check/enum = #7
+#> default = red
+#> check/enum/#7 = white
+#> check/enum/#2 = green
+#> check/enum/#0 = red
+#> check/enum/#3 = yellow
+#> type = string
+```
+Not the `user` namespace this time instead of the `spec` namespace from the example before.
+If you edit the first line of the editor (` = red`) you can change the actual value which is used by lcdproc.
+If you change the value to an invalid one, elektra will tell you after you exit the editor.
 
 ### QT Gui
 
@@ -207,4 +250,3 @@ In this example we change the background of the curses driver to green instead o
 Compared to `kdb set`, the GUI will not provide you with a senseful error message on which
 changed values are invalid. So if you use the GUI you should be aware that you have to set
 correct values or use the command line to see what actually is wrong.
-
