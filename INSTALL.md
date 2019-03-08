@@ -31,7 +31,7 @@ To setup the Elektra low-level version of LCDproc follow these steps:
   `/sw/lcdproc/lcdd/#0/current/server/driverpath` to `/usr/local/lib/lcdproc` (or whatever directory
   you installed the drivers to).
   ```sh
-  kdb set '/sw/lcdproc/lcdd/#0/current/server/driverpath' /usr/local/lib/lcdproc
+  kdb set '/sw/lcdproc/lcdd/#0/current/server/driverpath' /usr/local/lib/lcdproc/
   ```
 
 ---
