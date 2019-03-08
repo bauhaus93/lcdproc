@@ -183,9 +183,24 @@ you can simply call `kdb qt-gui`.
 
 This will open an application for you to see all available keys and their values.
 
-SCREENSHOT
+![Specification investigation](images/spec-investigation.png "QT-GUI")
 
-...
+1. You can see all available settings under the spec namespace
+In this example we see settings for LCDd
+1. This section shows all available drivers. Note the underscore (`_`) at the start which are specifications affecting all drivers.
+1. By clicking on any driver, you can investigate all available settings for the concrete driver
+1. By clicking on any setting, you can investigate the specification in this window
+1. If you change any values, press the `synchronize` button so elektra sees the changes you have made. 
+
+#### Changing a value
+
+The picture above shows all settings for the `spec` namespace. If you want to change a value you have to set
+it in the `user` namespace. Right-Click on the `user` namespace on the left side and and press `New` -> `Key ...`.
+This will open up a window in which you can set a value as following.
+
+![Changing a value](images/setting-a-value.png "Set key")
+
+In this example we change the background of the curses driver to green instead of the default cyan. Do not forget to press the `synchronize` button after you have finished your changes.
 
 #### Qt Gui drawbacks
 
