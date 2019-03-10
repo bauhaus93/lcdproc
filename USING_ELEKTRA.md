@@ -11,21 +11,21 @@ simply tells which values should be legal for a certain configuration setting,
 eg. the server `port` value should be an integer within 0 and 65535.
 
 This tutorial will teach you how change configuration and introspect the specification. 
-Be sure to have everything installed correctly by first 
- through [INSTALL.md](INSTALL.md).
+Be sure to have everything installed correctly by first going
+through the [INSTALL.md](INSTALL.md).
 
 ## Basic Concept
 
 Elektra stores values in form of a key value pair in a global, 
 hierarchical key database. They are saved below a *path* where a path
-is similar to linux directories. If you have followed the specification installation process correctly
+is similar to paths in Linux. If you have followed the specification installation process correctly
 from the [INSTALL.md](INSTALL.md), you now have the full specification 
 [mounted](https://www.libelektra.org/tutorials/mount-configuration-files)
 under the `spec` [namespace](https://www.libelektra.org/tutorials/namespaces).
 Namespaces are used for [cascading lookups](https://www.libelektra.org/tutorials/cascading)
-so the application knows where to search for configuration settings. In case of LCDproc,
-the `spec` namespace is first looked at since it contains metadata and afterwards the `user`
-namespace which holds the concrete configuration setting values.
+so the application knows where to search for configuration settings. The `spec` namespace is first 
+looked at since it contains metadata and afterwards the `user`
+namespace which holds the concrete configuration setting values. If
 
 You can easily store values with 
 `kdb set <key> <value>` and fetch them via `kdb get <key>`.
@@ -37,9 +37,10 @@ kdb get '/sw/lcdproc/lcdd/#0/current/curses/background'
 > green
 ```
 
-Elektra's database is hierarchically structured which means that keys are organized 
-similar to directories in a file system. In the case
-of LCDproc, the relevant keys are located under `/sw/lcdproc/<app>/#0/current`
+Elektra store these changes in a file for you in the background and updates it as soon as you
+set a new value. You can see where the file is located by using 
+`kdb file <key>` ([link to description](https://www.libelektra.org/manpages/kdb-file)).
+In the case of LCDproc, the relevant keys are located under `/sw/lcdproc/<app>/#0/current`
 where `<app>` will either be server configuration `lcdd` or the client configurations
 `lcdproc`, `lcdvc` and `lcdexec`. LCDproc drivers are installed on the server, 
 so in the upper example we used `lcdd` to change the background 
@@ -47,9 +48,9 @@ color of the curses driver to green.
  
 The new LCDproc comes with a configuration specification such as [LCDd-spec.ini](server/specification/LCDd-spec.ini)
 which is used by Elektra to validate configuration settings. They are located in the respective application subfolders
-for [lcdd](server\specification\LCDd-spec.ini), [lcdproc](clients\lcdproc\specification\lcdproc-spec.ini),
-[lcdvs](clients\lcdvc\specification\lcdvc-spec.ini), [lcdexec](clients\lcdexec\specification\lcdexec-spec.ini) and
-should be mounted as desribed in the INSTALL.md. You can also use `kdb file <key>` ([link to description](https://www.libelektra.org/manpages/kdb-file))
+for [lcdd](server/specification/LCDd-spec.ini), [lcdproc](clients/lcdproc/specification/lcdproc-spec.ini),
+[lcdvs](clients/lcdvc/specification/lcdvc-spec.ini), [lcdexec](clients/lcdexec/specification/lcdexec-spec.ini) and
+should be mounted as desribed in the [INSTALL.md](INSTALL.md). You can also use 
 to see where the file is located of a given key.
 This guarantees that certain mistakes cannot occur like setting the background color to *greeen* which could
 potentially crash the application. 
@@ -69,7 +70,6 @@ The following four possibilities will be explained in more detail:
 
 * `kdb set`
 * `kdb editor`
-* `web` gui
 * `qt` gui
  
 ### Kdb Set
@@ -86,13 +86,6 @@ kdb ls '/sw/lcdproc/lcdd/#0/current/server'
 ```
 To see all available configuration settings alltogether for `lcdd` you can execute 
 `kdb ls '/sw/lcdproc/lcdd/#0/current'`.
-To see the current value you can simply call `kdb get` on the respective key.
-Now lets take the curses driver for example again and lets see what is the 
-current background color is:
-```sh
-kdb get '/sw/lcdproc/lcdd/#0/current/curses/background'
-#> cyan
-```
 If you want to avoid typing the long path `/sw/lcdproc/lcdd/#0/current` all the time you
 can set a bookmark (see `man kdb`).
 ```sh
@@ -100,12 +93,19 @@ kdb set 'user/sw/elektra/kdb/#0/current/bookmarks/lcd' '/sw/lcdproc/lcdd/#0/curr
 kdb get +lcd/curses/background
 #> cyan
 ```
+To see the current value you can simply call `kdb get` on the respective key.
+Now lets take the curses driver for example again and lets see what is the 
+current background color is:
+```sh
+kdb get '+lcd/curses/background'
+#> cyan
+```
 
 The result comes from the set `default` metadata which is saved for the key. If no value is set
 by the user, the `default` value is taken.
 You can see all metadata by calling `kdb lsmeta`:
 ```sh
-kdb lsmeta '/sw/lcdproc/lcdd/#0/current/curses/background'
+kdb lsmeta '+lcd/curses/background'
 #> check/enum/#0
 #> check/enum/#1
 #> check/enum/#2
@@ -123,15 +123,15 @@ Here we can als see `check/enum/#0-7` which is used by Elektra to assert
 for correct configuration settings. You can query for the values by calling
 `kdb getmeta`
 ```sh
-kdb getmeta '/sw/lcdproc/lcdd/#0/current/curses/background' 'check/enum/#0'
+kdb getmeta '+lcd/curses/background' 'check/enum/#0'
 #> red
 ```
 This `.../#<number>` notation is the typical array notation which is used by Elektra.
 If you want to query all metadata and see their values you can use this little script:
 ```sh
-kdb lsmeta '/sw/lcdproc/lcdd/#0/current/curses/background' \
+kdb lsmeta '+lcd/curses/background' \
 | xargs -I% -n1 sh -c 'printf "% = " && kdb getmeta \
-"/sw/lcdproc/lcdd/#0/current/curses/background" "%"'
+"+lcd/curses/background" "%"'
 #> check/enum = #7
 #> check/enum/#0 = red
 #> check/enum/#1 = black
@@ -150,7 +150,7 @@ including their values with a simple command.
 If you try to set the value of the background to an invalid value, Elektra
 will raise an error and prevent a possible misconfiguration:
 ```sh
-kdb set '/sw/lcdproc/lcdd/#0/current/curses/background' purple
+kdb set '+lcd/curses/background' purple
 #> Using name user/sw/lcdproc/lcdd/#0/current/curses/background
 #> The command kdb set failed while accessing the key database with the info:
 #> Sorry, the error (#121) occurred ;(
@@ -169,32 +169,11 @@ Another sophisticated possibility to see available options and edit them
 is to use the `kdb editor`. If you call `kdb editor <key>`, a local editor will
 be opened and all keys under the given `<key>` including all metadata will be shown.
 
-```sh
-kdb editor 'spec/sw/lcdproc/lcdd/#0/current/curses/backlight' ni
-##Editor
-#> []
-#>  check/enum/#1 = black
-#>  description = background color when "backlight" is off
-#>  check/enum/#6 = cyan
-#>  check/enum/#5 = magenta
-#>  check/enum/#4 = blue
-#>  check/enum = #7
-#>  default = cyan
-#>  check/enum/#7 = white
-#>  check/enum/#2 = green
-#>  check/enum/#0 = red
-#>  check/enum/#3 = yellow
-#>  type = string
-```
- 
-As of now the editor is not able to handle multiple namespaces at once so be sure to always use 
-the key of the relevant namespace.
-
 If you want to change a value, the best way is to manually set it with `kdb set`. Afterwards
 the editor can be used to investigate all associated metadata and change the value afterwards.
 
 ```sh
-kdb set '/sw/lcdproc/lcdd/#0/current/curses/background' red
+kdb set '+lcd/curses/backlight' red
 kdb editor 'user/sw/lcdproc/lcdd/#0/current/curses/backlight' ni
 ##Editor
 #> = red
@@ -213,9 +192,11 @@ kdb editor 'user/sw/lcdproc/lcdd/#0/current/curses/backlight' ni
 #> check/enum/#3 = yellow
 #> type = string
 ```
-Not the `user` namespace this time instead of the `spec` namespace from the example before.
+Note the `user` namespace which is used. You can also change it globally by editing the key in the 
+`system` namespace (`system/sw/lcdproc/lcdd/#0/current/curses/backlight`)
 If you edit the first line of the editor (` = red`) you can change the actual value which is used by lcdproc.
 If you change the value to an invalid one, elektra will tell you after you exit the editor.
+You can also see all set values by calling `kdb editor 'user/sw/lcdproc/lcdd/#0/current' ni`.
 
 ### QT Gui
 
