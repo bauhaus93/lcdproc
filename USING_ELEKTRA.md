@@ -3,14 +3,10 @@
 In the new version of LCDproc, [Elektra](https://www.libelektra.org/home) 
 will be used to store and edit configuration settings which are used by LCDproc.
 
-Elektra stores configuration in a global, hierarchical key database. 
-Elektra furthermore provides the possibility to have a 
-[validation on configuration settings](https://www.libelektra.org/tutorials/validate-configuration)
-because of configuration specifications. A configuration specification 
+This tutorial will teach you how change configuration and introspect the configuration
+specification. A configuration specification 
 simply tells which values should be legal for a certain configuration setting,
 eg. the server `port` value should be an integer within 0 and 65535.
-
-This tutorial will teach you how change configuration and introspect the specification. 
 Be sure to have everything installed correctly by first going
 through the [INSTALL.md](INSTALL.md).
 
