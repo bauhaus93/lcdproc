@@ -24,8 +24,9 @@ from the [INSTALL.md](INSTALL.md), you now have the full specification
 under the `spec` [namespace](https://www.libelektra.org/tutorials/namespaces).
 Namespaces are used for [cascading lookups](https://www.libelektra.org/tutorials/cascading)
 so the application knows where to search for configuration settings. The `spec` namespace is first 
-looked at since it contains metadata and afterwards the `user`
-namespace which holds the concrete configuration setting values. If
+looked at since it contains metadata and afterwards the `proc` / `dir` /`user`/ and finally `system`
+namespace which holds the concrete configuration setting values. In case of LCDproc, the `system`
+namespace is most relevant as it is configured system-wide.
 
 You can easily store values with 
 `kdb set <key> <value>` and fetch them via `kdb get <key>`.
