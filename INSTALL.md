@@ -353,5 +353,5 @@ That's all the OS's we've actually done this with so far.
 
 # Using Elektra with LCDproc
 
-For a extensive tutorial on how to use Elektra along with lcdprod please take a look at
-out [tutorial](USING_ELEKTRA.md).
+For an extensive tutorial on how to use Elektra along with lcdprod please take a look at
+our [tutorial](USING_ELEKTRA.md).
