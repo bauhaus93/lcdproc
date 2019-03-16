@@ -98,36 +98,36 @@ menuscreens_init(void)
 	 */
 	keymask = 0;
 	menu_key = enter_key = NULL;
-	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/menukey", NULL);
+	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/menu/menukey", NULL);
 	if (tmp != NULL) {
 		menu_key = strdup(tmp);
 		keymask |= MENUTOKEN_MENU;
 	}
-	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/enterkey", NULL);
+	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/menu/enterkey", NULL);
 	if (tmp != NULL) {
 		enter_key = strdup(tmp);
 		keymask |= MENUTOKEN_ENTER;
 	}
 
 	up_key = down_key = NULL;
-	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/upkey", NULL);
+	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/menu/upkey", NULL);
 	if (tmp != NULL) {
 		up_key = strdup(tmp);
 		keymask |= MENUTOKEN_UP;
 	}
-	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/downkey", NULL);
+	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/menu/downkey", NULL);
 	if (tmp != NULL) {
 		down_key = strdup(tmp);
 		keymask |= MENUTOKEN_DOWN;
 	}
 
 	left_key = right_key = NULL;
-	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/leftkey", NULL);
+	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/menu/leftkey", NULL);
 	if (tmp != NULL) {
 		left_key = strdup(tmp);
 		keymask |= MENUTOKEN_LEFT;
 	}
-	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/rightkey", NULL);
+	tmp = econfig_get_string(config, CONFIG_BASE_KEY"/menu/rightkey", NULL);
 	if (tmp != NULL) {
 		right_key = strdup(tmp);
 		keymask |= MENUTOKEN_RIGHT;
