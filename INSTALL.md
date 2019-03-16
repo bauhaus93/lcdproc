@@ -34,6 +34,18 @@ To setup the Elektra low-level version of LCDproc follow these steps:
   kdb set '/sw/lcdproc/lcdd/#0/current/server/driverpath' /usr/local/lib/lcdproc/
   ```
 
+## Notes on lcdexec
+
+If you intend to use lcdexec you are encouraged to use the provided [script](clients/lcdexec/specification/kdb-set-commands.sh)
+which installs the same example config from the old lcdproc, just with elektra. The specification for lcdexec cannot provide
+such a default configuration because of deep recursive structures. As a result, lcdexec will not start correctly without a valid
+configuration, showing the error message `no main menu found in configuration`.
+
+## Notes on lcdvc
+
+lcdvc uses `/dev/vcs` which requires root privileges. You are also encouraged to set all values as root therefore.
+If you set values as non-root, they will be specific to your user and are hence not visible when logged in as root.
+
 ---
 
 Below you can find the original LCDproc INSTALL file.
