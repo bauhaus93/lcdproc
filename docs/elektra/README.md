@@ -2,7 +2,7 @@
 
 ## Setting up Elektra
 
--   Checkout the latest version of Elektra's `master` branch (commit `79408a3509d4e8f97369c877ff08709f7de04976`
+-   Checkout the latest version of Elektra's `master` branch (commit `704812a1841a02cbb4be06256cbc03d9342d841d`
     or later).
 -   Compile Elektra
     ```sh
