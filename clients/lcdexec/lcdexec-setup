@@ -209,7 +209,7 @@ kdb_set() {
 }
 
 kdb_setmeta() {
-    run_kdb setmeta "$NAMESPACE$BASE_KEY/$1" "$2" "$3"
+    run_kdb meta-set "$NAMESPACE$BASE_KEY/$1" "$2" "$3"
 }
 
 kdb_rm_r() {
@@ -221,7 +221,7 @@ kdb_exists() {
 }
 
 kdb_array_last() {
-    kdb getmeta "$BASE_KEY/$1" array 2>/dev/null
+    kdb meta-get "$BASE_KEY/$1" array 2>/dev/null
 }
 
 kdb_export() {
