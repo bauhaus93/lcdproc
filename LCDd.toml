@@ -322,7 +322,7 @@ offbrightness=0
 
 
 ## Matrix Orbital GLK driver ##
-[glk]
+[[glk]]
 
 # select the serial device to use [default: /dev/lcd]
 device='/dev/lcd'
@@ -614,14 +614,9 @@ size='20x4'
 size='20x4'
 
 # Offset in pixels from the top-left corner of the monitor [default: 0x0]
-Offset='200x200'
+offset='200x200'
 
 # X font to use, in XLFD format, as given by "xfontsel"
-Font='-*-terminus-*-r-*-*-*-320-*-*-*-*-*'
-
-## Y.A.R.D.2 LCD section
-[yard2LCD]
-size='20x4'
-# If rendering rate is too high, change in server\main.h #define RENDER_FREQ 8 to "1"
+font='-*-terminus-*-r-*-*-*-320-*-*-*-*-*'
 
 # EOF
