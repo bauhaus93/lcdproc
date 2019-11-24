@@ -26,5 +26,4 @@ sudo ldconfig && \
 cd .. && \
 mkdir -p .config && \
 cp lcdproc/LCDd.toml .config/LCDd.toml && \
-kdb set '/sw/lcdproc/lcdd/#0/current/server/drivers/#0' '@/curses/#0' && \
 echo "SUCCESS!"
