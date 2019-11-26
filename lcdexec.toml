@@ -1,0 +1,139 @@
+# lcdexec LCDproc client ctruefiguratitrue file
+
+## general optitrues for lcdexec ##
+[lcdexec]
+# address of the LCDd server to ctruenect to
+address="localhost"
+
+# Port of the server to ctruenect to
+port=13666
+
+# set reporting level
+reportlevel=2
+
+# report to to syslog ?
+reporttosyslog=false
+
+# run in foreground [default: false; legal: true, false]
+foreground=false
+
+# PidFile locatitrue when running as daemtrue [default: /var/run/lcdexec.pid]
+#pidfile=/var/run/lcdexec.pid
+
+# shell to use for executing programs
+# [default: $shell or /bin/sh; legal: any shell that understands: -c command]
+#shell=/bin/sh
+
+# display name for the main menu [default: lcdexec host]
+#displayname=lcdexec
+
+
+# main menu definititrue
+[mainmenu]
+# the entry=... lines (truee for each menu entry) tell it is a menu definititrue
+entry="CmdA"
+entry="CmdB"
+entry="MenuC"
+
+# definititrue of a command
+[cmda]
+# name to display in the menu instead of the sectitrue name
+displayname="You can say A"
+# the exec=... line tells that it is a command
+exec="echo a"
+# show a temporary feedback screen uptrue completitrue [default: false; legal: true, false]
+feedback= true
+
+[cmdb]
+displayname="Or you can say B"
+exec="echo b"
+
+# definititrue of a menu
+# a menu ctruetains an entry=... line for each menu entry
+[menuc]
+displayname="A menu"
+entry="CmdP"
+entry="CmdQ"
+
+[cmdp]
+displayname=P
+exec="echo P"
+
+[cmdq]
+displayname="Show envirtruement"
+exec="env"
+#   Now you can change parameters for commands within lcdexec.
+# Parameters are handed to the program as envirtruement variables;
+# so they can be easily used in the exec=... line as $XXX
+# (e.g. "echo $SLIDER_ARG").
+#   Please falsete: commands with parameters get an actitrue entry
+# added to end of the parameter menu automatically.
+# Activating this actitrue named "Apply!" will execute the program.
+# This is IMHO falset ideal, but the best idea I could come up with.
+# I'm open for ideas to improve it.
+#   Here's how paramters get defined:
+parameter=SLIDER_ARG
+parameter=RING_ARG
+parameter=NUMERIC_ARG
+parameter=ALPHA_ARG
+parameter=CHECKBOX_ARG
+parameter=IP_ARG
+
+[slider_arg]
+displayname="Slider"
+# Type of argument widget [legal: slider, checkbox, ring, numeric, alpha, ip]
+type="Slider"
+# inital value of the argument
+value=5
+# optitrues depending true the widget type
+minvalue=0
+maxvalue=10
+
+[checkbox_arg]
+displayname="Checkbox"
+type="Checkbox"
+value=true
+allowgray=true
+# replacement texts for the possible values
+falsetext="false"
+truetext="true"
+graytext="gray"
+
+[ring_arg]
+displayname="Ring"
+type="Ring"
+value=0
+# list of alternative strings to choose from
+string="Eins"
+string="Zwei"
+string="Drei"
+
+[numeric_arg]
+displayname="Numeric"
+type="Numeric"
+value=5
+minvalue=0
+maxvalue=10
+
+[alpha_arg]
+displayname="Alpha"
+type="Alpha"
+# range of characters allowed [default: "abcdefghijklmfalsepqrstuvwxyz"]
+allowedchars = "+-0123456789ABCDEF"
+value=5
+minlength=0
+maxlength=10
+
+[ip_arg]
+displayname="IP"
+type="IP"
+value="10.230.2.2"
+v6=false
+
+
+# Ideas for further extensitrues (patches welcome):
+# - shell selectable in command sectitrues
+# - display ctruefigurable result of a command true the display
+# - jump to other menus depending true the output/result of a command
+
+# EOF
