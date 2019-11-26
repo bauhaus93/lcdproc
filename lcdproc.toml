@@ -3,7 +3,7 @@
 ## general options ##
 [lcdproc]
 # address of the LCDd server to connect to
-server=localhost
+server="localhost"
 
 # Port of the server to connect to
 port=13666
@@ -42,9 +42,9 @@ showinvisible=false
 active=true
 
 # Show stats for Interface0
-interface0=eth0
+interface0="eth0"
 # Interface alias name to display [default: <interface name>]
-alias0=LAN
+alias0="LAN"
 
 # Show stats for Interface1
 #interface1=eth1
@@ -57,7 +57,7 @@ alias0=LAN
 # for more than 3 interfaces change MAX_INTERFACES in iface.h and rebuild
 
 # Units to display [default: byte; legal: byte, bit, packet]
-unit=bit
+unit="bit"
 
 # add screen with transferred traffic
 #transfer=TRUE
