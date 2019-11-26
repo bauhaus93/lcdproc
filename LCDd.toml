@@ -5,6 +5,8 @@
 # may not work properly (in particular no changes in character cases were done, one must check the LCDd specification
 # for the correct key name)
 # The comments were left in the file for benchmarking purposes.
+    # This comment is to show, that the plugin already preserves whitespace before comments.
+
 
 
 # LCDd.toml -- configuration file for the LCDproc server daemon LCDd
@@ -79,7 +81,7 @@ user="nobody"
 
 # The server will stay in the foreground if set to yes.
 # [default: no, legal: yes, no]
-#Foreground=true
+foreground=true
 
 # Hello message: each entry represents a display line; default: builtin
 #Hello="  Welcome to"
@@ -133,7 +135,6 @@ nextscreenkey="Right"
 
 
 ## The menu section. The menu is an internal LCDproc client. ##
-[menu]
 menu = { menukey = "Escape", enterkey = "Enter", upkey = "Up", downkey = "Down" }
 
 
@@ -225,7 +226,7 @@ foreground="blue"
 # background color when "backlight" is off [default: cyan]
 background="cyan"
 # background color when "backlight" is on [default: red]
-backlight="yellow"
+backlight="red"
 
 # display size [default: 20x4]
 size="20x4"
