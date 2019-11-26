@@ -27,4 +27,6 @@ cd .. && \
 mkdir -p .config && \
 cp lcdproc/LCDd.toml .config/LCDd.toml && \
 cp lcdproc/lcdproc.toml .config/lcdproc.toml && \
+cp lcdproc/lcdexec.toml .config/lcdexec.toml && \
+cp lcdproc/lcdvc.toml .config/lcdvc.toml && \
 echo "SUCCESS!"
