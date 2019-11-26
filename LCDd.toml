@@ -135,8 +135,11 @@ nextscreenkey="Right"
 
 
 ## The menu section. The menu is an internal LCDproc client. ##
-menu = { menukey = "Escape", enterkey = "Enter", upkey = "Up", downkey = "Down" }
-
+[menu]
+menukey = "Escape"
+enterkey = "Enter"
+upkey = "Up"
+downkey = "Down"
 
 ### Driver sections are below this line, in alphabetical order  ###
 
