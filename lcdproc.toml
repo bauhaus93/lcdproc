@@ -31,7 +31,7 @@ reporttosyslog=false
 
 [cpu]
 # Show screen
-active=True
+active=true
 ontime=1
 offtime=2
 showinvisible=false
@@ -39,7 +39,7 @@ showinvisible=false
 
 [iface]
 # Show screen
-active=True
+active=true
 
 # Show stats for Interface0
 interface0=eth0
@@ -65,12 +65,12 @@ unit=bit
 
 [memory]
 # Show screen
-active=True
+active=true
 
 
 [load]
 # Show screen
-active=True
+active=true
 # Min Load Avg at which the backlight will be turned off [default: 0.05]
 lowload=0.05
 # Max Load Avg at which the backlight will start blinking [default: 1.3]
@@ -79,7 +79,7 @@ highload=1.3
 
 [timedate]
 # Show screen
-active=True
+active=true
 # time format [default: %h:%m:%s; legal: see strftime(3)]
 timeformat="%H:%M:%S"
 # date format [default: %x; legal: see strftime(3)]
@@ -144,7 +144,7 @@ active=false
 
 [miniclock]
 # Show screen
-active=True
+active=true
 # time format [default: %h:%m; legal: see strftime(3)]
 timeformat="%H:%M"
 
