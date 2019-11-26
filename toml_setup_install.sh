@@ -26,4 +26,5 @@ sudo ldconfig && \
 cd .. && \
 mkdir -p .config && \
 cp lcdproc/LCDd.toml .config/LCDd.toml && \
+cp lcdproc/lcdproc.toml .config/lcdproc.toml && \
 echo "SUCCESS!"
