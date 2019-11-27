@@ -245,6 +245,7 @@ main(int argc, const char **argv)
 			signal to a process of a different user will fail */
 
 	//do_mainloop();
+	exit_program(0);
 	/* This loop never stops; we'll get out only with a signal...*/
 
 	return 0;
