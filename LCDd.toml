@@ -494,7 +494,7 @@ reboot=false
 
 
 ## LCDM001 driver ##
-[[lcdm001]
+[[lcdm001]]
 
 device="/dev/ttyS1"
 
