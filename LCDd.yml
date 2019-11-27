@@ -33,18 +33,14 @@
 # The drivers read their own options from the respective sections.
 
 
-
 ## Server section with all kinds of settings for the LCDd server ##
-[server]
-
+server:
 # Where can we find the driver modules ?
 # IMPORTANT: Make sure to change this setting to reflect your
 #            specific setup! Otherwise LCDd won"t be able to find
 #            the driver modules and will thus not be able to
 #            function properly.
 # NOTE: Always place a slash as last character !
-driverpath="/usr/local/lib/lcdproc/"
-drivers=["@/curses/#0"]
 
 # Tells the server to load the given drivers. Multiple lines can be given.
 # The name of the driver is case sensitive and determines the section
@@ -63,25 +59,37 @@ drivers=["@/curses/#0"]
 #   text, tyan, ula200, vlsys_m428, xosd, yard2LCD
 
 # Tells the driver to bind to the given interface. [default: 127.0.0.1]
-bind="127.0.0.1"
-
+  bind: 127.0.0.1
+  driverpath: /usr/local/lib/lcdproc/
+  drivers:
+  - '@/curses/#0'
+# The server will stay in the foreground if set to yes.
+# [default: no, legal: yes, no]
+  foreground: true
+# The "...Key=" lines define what the server does with keypresses that
+# don"t go to any client. The ToggleRotateKey stops rotation of screens, while
+# the PrevScreenKey and NextScreenKey go back / forward one screen (even if
+# rotation is disabled.
+# Assign the key string returned by the driver to the ...Key setting. These
+# are the defaults:
+  prevscreenkey: Left
+  togglerotatekey: Enter
+  nextscreenkey: Right
+#ScrollUpKey=Up
+#ScrollDownKey=Down
 # Listen on this specified port. [default: 13666]
-port=13666
-
+  port: 13666
+# User to run as.  LCDd will drop its root privileges and run as this user
+# instead. [default: nobody]
+  user: nobody
+# Sets the default time in seconds to displays a screen. [default: 4]
+  waittime: 5
 # Sets the reporting level; defaults to warnings and errors only.
 # [default: 2; legal: 0-5]
 #ReportLevel=3
 
 # Should we report to syslog instead of stderr? [default: no; legal: yes, no]
 #ReportToSyslog=true
-
-# User to run as.  LCDd will drop its root privileges and run as this user
-# instead. [default: nobody]
-user="nobody"
-
-# The server will stay in the foreground if set to yes.
-# [default: no, legal: yes, no]
-foreground=true
 
 # Hello message: each entry represents a display line; default: builtin
 #Hello="  Welcome to"
@@ -94,9 +102,6 @@ foreground=true
 # Sets the interval in microseconds for updating the display.
 # [default: 125000 meaning 8Hz]
 #FrameInterval=125000
-
-# Sets the default time in seconds to displays a screen. [default: 4]
-waittime=5
 
 # If set to no, LCDd will start with screen rotation disabled. This has the
 # same effect as if the ToggleRotateKey had been pressed. Rotation will start
@@ -121,85 +126,78 @@ waittime=5
 # set title scrolling speed [default: 10; legal: 0-10]
 #TitleSpeed=10
 
-# The "...Key=" lines define what the server does with keypresses that
-# don"t go to any client. The ToggleRotateKey stops rotation of screens, while
-# the PrevScreenKey and NextScreenKey go back / forward one screen (even if
-# rotation is disabled.
-# Assign the key string returned by the driver to the ...Key setting. These
-# are the defaults:
-togglerotatekey="Enter"
-prevscreenkey="Left"
-nextscreenkey="Right"
-#ScrollUpKey=Up
-#ScrollDownKey=Down
-
 
 ## The menu section. The menu is an internal LCDproc client. ##
-[menu]
-menukey = "Escape"
-enterkey = "Enter"
-upkey = "Up"
-downkey = "Down"
+menu:
+  downkey: Down
+  enterkey: Enter
+  menukey: Escape
+  upkey: Up
 
 ### Driver sections are below this line, in alphabetical order  ###
 
 
 ## EMAC BayRAD driver ##
-[[bayrad]]
-
+bayrad:
 # Select the output device to use [default: /dev/lcd]
-device="/dev/lcd"
+- device: /dev/lcd
+
 # Set the communication speed [default: 9600; legal:  1200, 2400, 9600, 19200]
-speed = 9600
+  speed: 9600
 
 ## CrystalFontz driver (for CF632 & CF634) ##
-[[cfontz]]
+cfontz:
+# Set the initial brightness [default: 1000; legal: 0 - 1000]
+- brightness: 1000
+
+# Set the initial contrast [default: 560; legal: 0 - 1000]
+  contrast: 350
 
 # Select the output device to use [default: /dev/lcd]
-device="/dev/ttyS0"
-# Select the LCD size [default: 20x4]
-size="20x4"
-# Set the initial contrast [default: 560; legal: 0 - 1000]
-contrast=350
-# Set the initial brightness [default: 1000; legal: 0 - 1000]
-brightness=1000
+  device: /dev/ttyS0
+
+# Set the firmware version (New means >= 2.0) [default: no; legal: yes, no]
+  newfirmware: false
+
 # Set the initial off-brightness [default: 0; legal: 0 - 1000]
 # This value is used when the display is normally
 # switched off in case LCDd is inactive
-offbrightness=0
-# Set the communication speed [default: 9600; legal: 1200, 2400, 9600, 19200,
-# 115200]
-speed=9600
-# Set the firmware version (New means >= 2.0) [default: no; legal: yes, no]
-newfirmware=false
+  offbrightness: 0
+
 # Reinitialize the LCD"s BIOS [default: no; legal: yes, no]
 # normally you shouldn"t need this
-reboot=false
+  reboot: false
+
+# Select the LCD size [default: 20x4]
+  size: 20x4
+
+# Set the communication speed [default: 9600; legal: 1200, 2400, 9600, 19200,
+# 115200]
+  speed: 9600
 
 
 
 ## CrystalFontz packet driver (for CFA533, CFA631, CFA633 & CFA635) ##
-[[cfontzpacket]]
-
-# Select the LCD model [default: 633; legal: 533, 631, 633, 635]
-model=633
-
-# Select the output device to use [default: /dev/lcd]
-device="/dev/ttyUSB0"
+cfontzpacket:
+# Set the initial brightness [default: 1000; legal: 0 - 1000]
+- brightness: 1000
 
 # Set the initial contrast [default: 560; legal: 0 - 1000]
-contrast=350
+  contrast: 350
 
-# Set the initial brightness [default: 1000; legal: 0 - 1000]
-brightness=1000
+# Select the output device to use [default: /dev/lcd]
+  device: /dev/ttyUSB0
+
+# Select the LCD model [default: 633; legal: 533, 631, 633, 635]
+  model: 633
 
 # Set the initial off-brightness [default: 0; legal: 0 - 1000]
 # This value is used when the display is normally
 # switched off in case LCDd is inactive
-offbrightness=50
+  offbrightness: 50
 
 # Reinitialize the LCD"s BIOS on driver start. [default: no; legal: yes, no]
-reboot=true
+  reboot: true
 
 # Enable the USB flag if the device is connected to an USB port. For
 # serial ports leave it disabled. [default: no; legal: yes, no]
@@ -221,57 +219,38 @@ reboot=true
 
 
 ## Curses driver ##
-[[curses]]
-
+curses:
 # color settings
-# foreground color [default: blue]
-foreground="blue"
 # background color when "backlight" is off [default: cyan]
-background="cyan"
+- background: cyan
+# foreground color [default: blue]
+  foreground: blue
 # background color when "backlight" is on [default: red]
-backlight="red"
+  backlight: red
 
+# draw Border [default: yes; legal: yes, no]
+  drawborder: true
 # display size [default: 20x4]
-size="20x4"
+  size: 20x4
 
 # What position (X,Y) to start the left top corner at...
 # Default: (7,7)
-topleftx=7
-toplefty=7
+  topleftx: 7
+  toplefty: 7
 
 # use ASC symbols for icons & bars [default: no; legal: yes, no]
-useacs=false
-
-# draw Border [default: yes; legal: yes, no]
-drawborder=true
+  useacs: false
 
 
 
 ## Cwlinux driver ##
-[[cwlnx]]
-
-# Select the LCD model [default: 12232; legal: 12232, 12832, 1602]
-model=12232
-
+cwlnx:
 # Select the output device to use [default: /dev/lcd]
-device="/dev/ttyUSB0"
-
-# Select the LCD size. Default depends on model:
-# 12232: 20x4
-# 12832: 21x4
-# 1602: 16x2
-size="20x4"
-
-# Set the communication speed [default: 19200; legal: 9600, 19200]
-speed=19200
-
-# Reinitialize the LCD"s BIOS [default: no; legal: yes, no]
-# normally you shouldn"t need this
-reboot=false
+- device: /dev/ttyUSB0
 
 # If you have a keypad connected. Keypad layout is currently not
 # configureable from the config file.
-keypad=true
+  keypad: true
 
 # If you have a non-standard keypad you can associate any keystrings to keys.
 # There are 6 input keys in the CwLnx hardware that generate characters
@@ -292,10 +271,26 @@ keypad=true
 # Default value is no
 #keypad_test_mode=true
 
+# Select the LCD model [default: 12232; legal: 12232, 12832, 1602]
+  model: 12232
+
+# Reinitialize the LCD"s BIOS [default: no; legal: yes, no]
+# normally you shouldn"t need this
+  reboot: false
+
+# Select the LCD size. Default depends on model:
+# 12232: 20x4
+# 12832: 21x4
+# 1602: 16x2
+  size: 20x4
+
+# Set the communication speed [default: 19200; legal: 9600, 19200]
+  speed: 19200
+
 
 
 ## ea65 driver for the display in AOpen XC Cube AV EA65 media barebones ##
-[[ea65]]
+ea65:
 
 # Device is fixed /dev/ttyS1
 # Width and Height are fixed 9x1
@@ -305,30 +300,34 @@ keypad=true
 # Brightness 0 to 299 -> LEDs off
 # Brightness 300 to 699 -> LEDs half bright
 # Brightness 700 to 1000 -> LEDs full bright
-brightness=500
+- brightness: 500
 # OffBrightness is the the value used for the "backlight off" state
-offbrightness=0
+  offbrightness: 0
+
 
 
 ## Matrix Orbital GLK driver ##
-[[glk]]
+glk:
+# set the initial contrast value [default: 500; legal: 0 - 1000]
+- contrast: 500
 
 # select the serial device to use [default: /dev/lcd]
-device="/dev/lcd"
-
-# set the initial contrast value [default: 500; legal: 0 - 1000]
-contrast=500
-
+  device: /dev/lcd
 # set the serial port speed [default: 19200; legal: 9600, 19200, 38400, 57600, 115200]
-speed=19200
-
-
+  speed: 19200
 
 ## Hitachi HD44780 driver ##
-[[hd44780]]
+hd44780:
+# Character map to to map ISO-8859-1 to the LCD"s character set
+# [default: hd44780_default; legal: hd44780_default, hd44780_euro, ea_ks0073,
+# sed1278f_0b, hd44780_koi8_r, hd44780_cp1251, hd44780_8859_5, upd16314,
+# weh001602a_1]
+# (hd44780_koi8_r, hd44780_cp1251, hd44780_8859_5, upd16314 and weh001602a_1
+# are possible if compiled with additional charmaps)
+- charmap: hd44780_default
 
 # Select what type of connection. See documentation for available types.
-connectiontype="4bit"
+  connectiontype: 4bit
 
 # Select model if have non-standard one which require extra initialization or handling or
 # just want extra features it offers.
@@ -345,17 +344,89 @@ connectiontype="4bit"
 
 # I/O address of the LPT port. Usual values are: 0x278, 0x378 and 0x3BC.
 # For I2C connections this sets the slave address (usually 0x20).
-port=0x378
+  port: 888
+
+# Font bank to be used for some displays such as the WINSTAR WEH001602A
+# 0: English/Japanese (default)
+# 1: Western Europe I
+# 2: English/Rusian
+# 3: Western Europe II
+#FontBank=0
+
+# If your display is slow and cannot keep up with the flow of data from
+# LCDd, garbage can appear on the LCDd. Set this delay factor to 2 or 4
+# to increase the delays. Default: 1.
+#DelayMult=2
+
+# Some displays (e.g. vdr-wakeup) need a message from the driver to that it
+# is still alive. When set to a value bigger then null the character in the
+# upper left corner is updated every <KeepAliveDisplay> seconds. Default: 0.
+#KeepAliveDisplay=0
+
+# If you experience occasional garbage on your display you can use this
+# option as workaround. If set to a value bigger than null it forces a
+# full screen refresh <RefreshDiplay> seconds. Default: 0.
+#RefreshDisplay=5
+
+# You can reduce the inserted delays by setting this to false.
+# On fast PCs it is possible your LCD does not respond correctly.
+# Default: true.
+  delaybus: true
 
 # Device of the serial, I2C, or SPI interface [default: /dev/lcd]
-device="/dev/ttyS0"
+  device: /dev/ttyS0
 
-# Bitrate of the serial port (0 for interface default)
-speed=0
+# If you have a keypad you can assign keystrings to the keys.
+# See documentation for used terms and how to wire it.
+# For example to give directly connected key 4 the string "Enter", use:
+#   KeyDirect_4=Enter
+# For matrix keys use the X and Y coordinates of the key:
+#   KeyMatrix_1_3=Enter
+  keymatrix:
+  - []
+  - []
+  - []
+  - []
+  - - Enter
+    - Up
+    - Down
+    - Escape
 
 # If you have a keypad connected.
 # You may also need to configure the keypad layout further on in this file.
-keypad=false
+  keypad: false
+
+# If you have the additional output port ("bargraph") and you want to
+# be able to control it with the lcdproc OUTPUT command
+  outputport: false
+
+# Specifies if the last line is pixel addressable (yes) or it controls an
+# underline effect (no). [default: yes; legal: yes, no]
+#Lastline=true
+
+# Specifies the size of the LCD.
+# In case of multiple combined displays, this should be the total size.
+  size: 20x4
+
+# Bitrate of the serial port (0 for interface default)
+  speed: 0
+
+# For multiple combined displays: how many lines does each display have.
+# Vspan=2,2 means both displays have 2 lines.
+#vspan=2,2
+
+# If you have an HD66712, a KS0073 or another controller with "extended mode",
+# set this flag to get into 4-line mode. On displays with just two lines, do
+# not set this flag.
+# As an additional restriction, controllers with and without extended mode
+# AND 4 lines cannot be mixed for those connection types that support more
+# than one display!
+# NOTE: This option is deprecated in favour of choosing Model=extended option.
+#ExtendedMode=true
+
+# In extended mode, on some controllers like the ST7036 (in 3 line mode)
+# the next line in DDRAM won"t start 0x20 higher. [default: 0x20]
+#LineAddress=0x10
 
 # Set the initial contrast (bwctusb, lcd2usb, and usb4all)
 # [default: 800; legal: 0 - 1000]
@@ -403,100 +474,29 @@ keypad=false
 #BacklightCmdOff=0x1234
 
 
-# If you have the additional output port ("bargraph") and you want to
-# be able to control it with the lcdproc OUTPUT command
-outputport=false
-
-# Specifies if the last line is pixel addressable (yes) or it controls an
-# underline effect (no). [default: yes; legal: yes, no]
-#Lastline=true
-
-# Specifies the size of the LCD.
-# In case of multiple combined displays, this should be the total size.
-size="20x4"
-
-# For multiple combined displays: how many lines does each display have.
-# Vspan=2,2 means both displays have 2 lines.
-#vspan=2,2
-
-# If you have an HD66712, a KS0073 or another controller with "extended mode",
-# set this flag to get into 4-line mode. On displays with just two lines, do
-# not set this flag.
-# As an additional restriction, controllers with and without extended mode
-# AND 4 lines cannot be mixed for those connection types that support more
-# than one display!
-# NOTE: This option is deprecated in favour of choosing Model=extended option.
-#ExtendedMode=true
-
-# In extended mode, on some controllers like the ST7036 (in 3 line mode)
-# the next line in DDRAM won"t start 0x20 higher. [default: 0x20]
-#LineAddress=0x10
-
-# Character map to to map ISO-8859-1 to the LCD"s character set
-# [default: hd44780_default; legal: hd44780_default, hd44780_euro, ea_ks0073,
-# sed1278f_0b, hd44780_koi8_r, hd44780_cp1251, hd44780_8859_5, upd16314,
-# weh001602a_1]
-# (hd44780_koi8_r, hd44780_cp1251, hd44780_8859_5, upd16314 and weh001602a_1
-# are possible if compiled with additional charmaps)
-charmap="hd44780_default"
-
-# Font bank to be used for some displays such as the WINSTAR WEH001602A
-# 0: English/Japanese (default)
-# 1: Western Europe I
-# 2: English/Rusian
-# 3: Western Europe II
-#FontBank=0
-
-# If your display is slow and cannot keep up with the flow of data from
-# LCDd, garbage can appear on the LCDd. Set this delay factor to 2 or 4
-# to increase the delays. Default: 1.
-#DelayMult=2
-
-# Some displays (e.g. vdr-wakeup) need a message from the driver to that it
-# is still alive. When set to a value bigger then null the character in the
-# upper left corner is updated every <KeepAliveDisplay> seconds. Default: 0.
-#KeepAliveDisplay=0
-
-# If you experience occasional garbage on your display you can use this
-# option as workaround. If set to a value bigger than null it forces a
-# full screen refresh <RefreshDiplay> seconds. Default: 0.
-#RefreshDisplay=5
-
-# You can reduce the inserted delays by setting this to false.
-# On fast PCs it is possible your LCD does not respond correctly.
-# Default: true.
-delaybus=true
-
-# If you have a keypad you can assign keystrings to the keys.
-# See documentation for used terms and how to wire it.
-# For example to give directly connected key 4 the string "Enter", use:
-#   KeyDirect_4=Enter
-# For matrix keys use the X and Y coordinates of the key:
-#   KeyMatrix_1_3=Enter
-keymatrix=[[], [], [], [], ["Enter", "Up", "Down", "Escape"]]
-
 
 ## LB216 driver ##
-[[lb216]]
-
-# Select the output device to use [default: /dev/lcd]
-device="/dev/lcd"
+lb216:
 
 # Set the initial brightness [default: 255; legal: 0 - 255]
-brightness=255
+- brightness: 255
 
-# Set the communication speed [default: 9600; legal: 2400, 9600]
-speed=9600
+# Select the output device to use [default: /dev/lcd]
+  device: /dev/lcd
 
 # Reinitialize the LCD"s BIOS [default: no; legal: yes, no]
-reboot=false
+  reboot: false
+
+# Set the communication speed [default: 9600; legal: 2400, 9600]
+  speed: 9600
 
 
 
 ## LCDM001 driver ##
-[[lcdm001]
+lcdm001:
 
-device="/dev/ttyS1"
+- backkey: UpKey
+  device: /dev/ttyS1
 
 # keypad settings
 # Keyname      Function
@@ -506,18 +506,18 @@ device="/dev/ttyS1"
 # BackKey      Back(Go to previous screen) Up/Left
 # ForwardKey   Forward(Go to next screen)  Down/Right
 # MainMenuKey  Open main menu              Exit/Cancel
-pausekey="LeftKey"
-backkey="UpKey"
-forwardkey="DownKey"
-mainmenukey="RightKey"
+  forwardkey: DownKey
+  mainmenukey: RightKey
+  pausekey: LeftKey
 
 # You can rearrange the settings here.
 # If your device is broken, have a look at server/drivers/lcdm001.h
 
 
 ## Linux event device input driver ##
-[[linux_input]]
+linux_input:
 
+- {}
 # Select the input device to use [default: /dev/input/event0]. This may be
 # either an absolute path to the input node, starting with "/", or
 # an input device name, e.g. "Logitech Gaming Keyboard Gaming Keys".
@@ -533,37 +533,25 @@ mainmenukey="RightKey"
 #key=108,Down
 
 
+
 ## Matrix Orbital driver ##
-[[mtxorb]]
+mtxorb:
 
-# Select the output device to use [default: /dev/lcd]
-device="/dev/ttyS0"
-
-# Set the display size [default: 20x4]
-size="20x4"
-
-# Set the display type [default: lcd; legal: lcd, lkd, vfd, vkd]
-type="lkd"
+# Set the initial brightness [default: 1000; legal: 0 - 1000]
+- brightness: 1000
 
 # Set the initial contrast [default: 480]
 # NOTE: The driver will ignore this if the display
 #       is a vfd or vkd as they don"t have this feature
-contrast=480
+  contrast: 480
+
+# Select the output device to use [default: /dev/lcd]
+  device: /dev/ttyS0
 
 # Some old displays do not have an adjustable backlight but only can
 # switch the backlight on/off. If you experience randomly appearing block
 # characters, try setting this to false. [default: yes; legal: yes, no]
-hasadjustablebacklight=false
-
-# Set the initial brightness [default: 1000; legal: 0 - 1000]
-brightness=1000
-# Set the initial off-brightness [default: 0; legal: 0 - 1000]
-# This value is used when the display is normally
-# switched off in case LCDd is inactive
-offbrightness=0
-
-# Set the communication speed [default: 19200; legal: 1200, 2400, 9600, 19200]
-speed=19200
+  hasadjustablebacklight: false
 
 # The following table translates from MtxOrb key letters to logical key names.
 # By default no keys are mapped, meaning the keypad is not used at all.
@@ -580,32 +568,44 @@ speed=19200
 # LCDd. LCDd will output all characters it receives.
 # Afterwards you can modify the settings above and set
 # keypad_set_mode to no again.
-keypad_test_mode=false
+  keypad_test_mode: false
+
+# Set the initial off-brightness [default: 0; legal: 0 - 1000]
+# This value is used when the display is normally
+# switched off in case LCDd is inactive
+  offbrightness: 0
+# Set the display size [default: 20x4]
+  size: 20x4
+
+# Set the communication speed [default: 19200; legal: 1200, 2400, 9600, 19200]
+  speed: 19200
+
+# Set the display type [default: lcd; legal: lcd, lkd, vfd, vkd]
+  type: lkd
 
 
 ## Pyramid LCD driver ##
-[[pyramid]]
-
+pyramid:
 # device to connect to [default: /dev/lcd]
-device="/dev/ttyUSB0"
+- device: /dev/ttyUSB0
 
 
 ## Text driver ##
-[[text]]
+text:
 # Set the display size [default: 20x4]
-size="20x4"
+- size: 20x4
 
 
 ## OnScreen Display using libxosd ##
-[[xosd]]
-
-# set display size [default: 20x4]
-size="20x4"
-
-# Offset in pixels from the top-left corner of the monitor [default: 0x0]
-offset="200x200"
+xosd:
 
 # X font to use, in XLFD format, as given by "xfontsel"
-font="-*-terminus-*-r-*-*-*-320-*-*-*-*-*"
+- font: -*-terminus-*-r-*-*-*-320-*-*-*-*-*
+
+# Offset in pixels from the top-left corner of the monitor [default: 0x0]
+  offset: 200x200
+
+# set display size [default: 20x4]
+  size: 20x4
 
 # EOF

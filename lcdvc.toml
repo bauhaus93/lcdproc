@@ -28,7 +28,7 @@
 #rightkey=Right
 
 # VC devices to use [default: /dev/vcs, /dev/vcsa]
-vcsdevice="/dev/vcs"
-vcsadevice="/dev/vcsa"
+vcsdevice="/dev/null"
+vcsadevice="/dev/null"
 
 # EOF
